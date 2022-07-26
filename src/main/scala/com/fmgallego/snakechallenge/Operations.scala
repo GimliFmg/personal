@@ -1,7 +1,7 @@
 package com.fmgallego.snakechallenge
 
 import com.fmgallego.literals.Literals.ErrorMessages._
-import com.fmgallego.literals.Literals.Snake.{LengthLowerLimit, LengthUpperLimit, SnakeArray, SnakeILengthLimit, Value1}
+import com.fmgallego.literals.Literals.Snake.{LengthLowerLimit, LengthUpperLimit, MoveDown, MoveLeft, MoveRight, MoveUp, SnakeArray, SnakeILengthLimit, Value1}
 import org.apache.logging.log4j.scala.Logging
 
 object Operations extends Logging {
@@ -65,28 +65,23 @@ object Operations extends Logging {
     }
   }
 
-  def movingRight(snake: Array[Array[Int]]): Array[Array[Int]] = {
-    val RightMov: List[Int] = List(snake(0)(0), snake(0)(1) + 1)
-    val NewSnake = (snake.toList.map(_.toList).reverse :+ RightMov).reverse.take(snake.length)
-    NewSnake.toArray.map(_.toArray)
+  def defineMovement(snake: Array[Array[Int]], movType: String): Array[Array[Int]] = {
+    val x = movType match {
+      case MoveRight => 0  case MoveLeft => 0
+      case MoveUp => -1 case MoveDown => 1
+    }
+    val y = movType match {
+      case MoveRight => 1 case MoveLeft => -1
+      case MoveUp => -0 case MoveDown => 0
+    }
+    val MovType = List(snake(0)(0) + x, snake(0)(1) + y)
+    (snake.toList.map(_.toList).reverse :+ MovType).reverse.take(snake.length)
+    .toArray.map(_.toArray)
   }
 
-  def movingLeft(snake: Array[Array[Int]]): Array[Array[Int]] = {
-    val LeftMov: List[Int] = List(snake(0)(0), snake(0)(1) - 1)
-    val NewSnake = (snake.toList.map(_.toList).reverse :+ LeftMov).reverse.take(snake.length)
-    NewSnake.toArray.map(_.toArray)
-  }
-
-  def movingUp(snake: Array[Array[Int]]): Array[Array[Int]] = {
-    val UpMov: List[Int] = List(snake(0)(0) - 1, snake(0)(1))
-    val NewSnake = (snake.toList.map(_.toList).reverse :+ UpMov).reverse.take(snake.length)
-    NewSnake.toArray.map(_.toArray)
-  }
-
-  def movingDown(snake: Array[Array[Int]]): Array[Array[Int]] = {
-    val DownMov: List[Int] = List(snake(0)(0) + 1, snake(0)(1))
-    val NewSnake = (snake.toList.map(_.toList).reverse :+ DownMov).reverse.take(snake.length)
-    NewSnake.toArray.map(_.toArray)
-  }
+  def movingRight(snake: Array[Array[Int]]): Array[Array[Int]] = defineMovement(snake, MoveRight)
+  def movingLeft(snake: Array[Array[Int]]): Array[Array[Int]] = defineMovement(snake, MoveLeft)
+  def movingUp(snake: Array[Array[Int]]): Array[Array[Int]] = defineMovement(snake, MoveUp)
+  def movingDown(snake: Array[Array[Int]]): Array[Array[Int]] = defineMovement(snake, MoveDown)
 
 }
