@@ -1,10 +1,22 @@
 package com.fmgallego.snakechallenge
 
-import com.fmgallego.literals.Literals.Snake.{LengthLowerLimit, LengthUpperLimit}
+import com.fmgallego.snakechallenge.Operations.assertSnakeConstraints
+import org.apache.logging.log4j.scala.Logging
 
-class Snake(snake: Array[Array[Int]]) {
+case class Snake(snake: Array[Array[Int]]) {
 
-  val SnakeLength: Int = snake.length
-  val SnakeLengthFlag: Boolean =
-    (LengthLowerLimit >= SnakeLength) && (SnakeLength <= LengthUpperLimit)
+  val SnakeArray: Array[Array[Int]] = snake
+}
+
+object Snake extends Logging {
+
+  def apply(snake: Array[Array[Int]], cols: Int): Option[Snake] = {
+
+    val BoardAndSnakeLimits: Boolean = assertSnakeConstraints(snake, cols)
+
+    if (BoardAndSnakeLimits) Some(new Snake(snake))
+    else None
+
+  }
+
 }
