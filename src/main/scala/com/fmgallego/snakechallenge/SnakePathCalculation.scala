@@ -1,17 +1,17 @@
 package com.fmgallego.snakechallenge
 
-import com.fmgallego.snakechallenge.Operations.{movingDown, movingLeft, movingRight, movingUp}
+import com.fmgallego.snakechallenge.Operations.{movingDown, movingLeft, movingRight, movingUp, SnakeArray}
 
 import scala.annotation.tailrec
 
-class SnakePathCalculation(snake: Array[Array[Int]], boardCols: Int, depth: Int) {
+class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) {
 
-  val SnakeFirstArray: Array[Array[Int]] = snake
+  val SnakeFirstArray: SnakeArray = snake
   var Depth: Int = 0
 
   // TODO: WORKS ALMOST FINE, JUST NEED TO CHECK IF SNAKE IS COLLAPSING
   @tailrec
-  final def getPaths(snake: Array[Array[Int]]): Option[Int] = {
+  final def getPaths(snake: SnakeArray): Option[Int] = {
       if (Snake(movingRight(snake), boardCols).isDefined) {
         if(Depth == depth) {
           println("Your achieved depth is " + Depth)
