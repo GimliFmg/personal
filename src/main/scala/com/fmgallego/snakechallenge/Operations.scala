@@ -1,12 +1,28 @@
 package com.fmgallego.snakechallenge
 
 import com.fmgallego.literals.Literals.ErrorMessages._
-import com.fmgallego.literals.Literals.Snake.{LengthLowerLimit, LengthUpperLimit, MoveDown, MoveLeft, MoveRight, MoveUp, SnakeInputArray, SnakeILengthLimit, Value1}
+import com.fmgallego.literals.Literals.Snake.{BarSep, LengthLowerLimit, LengthUpperLimit, MoveDown, MoveLeft, MoveRight, MoveUp, SnakeILengthLimit, Value1}
 import org.apache.logging.log4j.scala.Logging
+import org.rogach.scallop.ScallopOption
 
 object Operations extends Logging {
 
   type SnakeArray = Array[Array[Int]]
+
+  /**
+    * this method will transform input params from string to Array
+    *
+    * @param arrayAsString will be input string with snake's position
+    * @param board         will be input string with board's size (n x m)
+    * @return an Array of Array[Int] in case board = false and Array[Int] if true
+    */
+  def getParamsAsArray(arrayAsString: ScallopOption[String], board: Boolean = false): Array[Int] = {
+    if (board) {
+      arrayAsString.toString.toArray.map(_.toInt)
+    } else {
+      arrayAsString.toString.split(BarSep).map(_.toInt)
+    }
+  }
 
   /**
     * this method will assert if snake constraints related to the board are met
@@ -41,7 +57,7 @@ object Operations extends Logging {
     val SnakePos: Int = snake(coord)(1)
 
     if (coord - 1 < 0) SnakePos == snake(coord + 1)(1)
-    else if (coord + 1 >= SnakeInputArray.length) SnakePos == snake(coord - 1)(1)
+    else if (coord + 1 >= snake.length) SnakePos == snake(coord - 1)(1)
     else (SnakePos == snake(coord - 1)(1)) || (SnakePos == snake(coord + 1)(1))
 
   }
@@ -50,7 +66,7 @@ object Operations extends Logging {
     val SnakePos: Int = snake(coord)(0)
 
     if (coord - 1 < 0) SnakePos == snake(coord + 1)(0)
-    else if (coord + 1 >= SnakeInputArray.length) SnakePos == snake(coord - 1)(0)
+    else if (coord + 1 >= snake.length) SnakePos == snake(coord - 1)(0)
     else (SnakePos == snake(coord - 1)(0)) || (SnakePos == snake(coord + 1)(0))
   }
 
@@ -95,7 +111,7 @@ object Operations extends Logging {
   def movingDown(snake: SnakeArray): SnakeArray = defineMovement(snake, MoveDown)
 
   def looking(snakeNewPosition: SnakeArray, lastSnake: SnakeArray): Boolean = {
-    val NewHead: Array[Int] = snakeNewPosition take 1 flatMap(_.toList)
+    val NewHead: Array[Int] = snakeNewPosition take 1 flatMap (_.toList)
     lastSnake contains NewHead
   }
 
