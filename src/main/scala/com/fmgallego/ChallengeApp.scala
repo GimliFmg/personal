@@ -9,14 +9,11 @@ object ChallengeApp extends App {
     val BoardColumns: Int = BoardGeneration.get.board(1)
     val SnakeGeneration: Option[Snake] = Snake(SnakeArray, BoardColumns)
 
+    new SnakePathCalculation(SnakeArray, BoardColumns, 3).getPaths(SnakeArray)
   }
 
   catch {
     case e: Exception => println("Your Board or Snake doesn't match constraints")
-  }
-
-  try {
-    new SnakePathCalculation(SnakeArray, BoardColumns, 3).getPaths(SnakeArray)
   }
 
 }
