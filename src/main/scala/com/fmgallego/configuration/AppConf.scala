@@ -35,6 +35,15 @@ case class AppConf(arguments: Seq[String]) extends ScallopConf(arguments) with L
     opt[String](short = 'd', required = true,
       descr = "Parameter to determine depth")
 
+  /**
+    * Validations
+    */
+  validateOpt(inputSnakeArray, inputBoardSize, requiredDepth) {
+    case (None, _, _) => Left("Input Snake Array is missing")
+    case (_, None, _) => Left("Board size values are missing")
+    case (_, _, None) => Left("Required Depth is missing")
+  }
+
   verify()
 
 }

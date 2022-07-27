@@ -16,7 +16,7 @@ object Operations extends Logging {
     * @param board         will be input string with board's size (n x m)
     * @return an Array of Array[Int] in case board = false and Array[Int] if true
     */
-  def getParamsAsArray(arrayAsString: ScallopOption[String], board: Boolean = false): Array[Int] = {
+  def getParamsAsArray(arrayAsString: String, board: Boolean = false): Array[Int] = {
     if (board) {
       arrayAsString.toString.toArray.map(_.toInt)
     } else {

@@ -6,13 +6,13 @@ import com.fmgallego.snakechallenge.Operations.getParamsAsArray
 
 object ChallengeApp {
 
-  def main(args: Array[String]): Unit = {
+  def main(args: Seq[String]): Unit = {
     try {
-      val config = AppConf(args)
-      val BoardSize: Array[Int] = getParamsAsArray(config.inputBoardSize)
+      // val config = AppConf(args)
+      val BoardSize: Array[Int] = getParamsAsArray(args(0))
       val SnakeInputPosition: Array[Array[Int]] =
-        Array(getParamsAsArray(config.inputSnakeArray, board = true))
-      val InputDepth: Int = config.requiredDepth.toString.toInt
+        Array(getParamsAsArray(args(1), board = true))
+      val InputDepth: Int = args(2).toInt
       val BoardColumns: Int = BoardSize(1)
 
       // TODO: GET X POSITIONS CHECKED WITH SNAKE
