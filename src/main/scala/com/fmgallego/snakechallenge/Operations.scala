@@ -1,7 +1,7 @@
 package com.fmgallego.snakechallenge
 
 import com.fmgallego.literals.Literals.ErrorMessages._
-import com.fmgallego.literals.Literals.Snake.{DashSeparator, LengthLowerLimit, LengthUpperLimit, MoveDown, MoveLeft, MoveRight, MoveUp, SnakeILengthLimit, StringXSeparator, Value1}
+import com.fmgallego.literals.Literals.SnakeLiterals._
 import org.apache.logging.log4j.scala.Logging
 
 object Operations extends Logging {
