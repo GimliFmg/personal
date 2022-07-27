@@ -11,6 +11,7 @@ case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) e
   var Depth: Int = 0
 
   // TODO: WORKS ALMOST FINE, JUST NEED TO CHECK IF SNAKE IS COLLAPSING
+  // CHECK TRACES
     @tailrec
     final def getPaths(snake: SnakeArray): Option[Int] = {
       if (Snake(movingRight(snake), boardCols).isDefined) {
