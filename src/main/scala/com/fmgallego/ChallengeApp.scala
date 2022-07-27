@@ -1,28 +1,31 @@
 package com.fmgallego
 
 import com.fmgallego.snakechallenge.{Board, SnakePathCalculation}
-import com.fmgallego.configuration.AppConf
-import com.fmgallego.snakechallenge.Operations.getParamsAsArray
+import com.fmgallego.snakechallenge.Operations.{newBoardArray, newSnakeArray, SnakeArray}
+import org.apache.logging.log4j.scala.Logging
 
-object ChallengeApp {
+object ChallengeApp extends Logging {
 
-  def main(args: Seq[String]): Unit = {
+  def main(args: Array[String]): Unit = {
     try {
-      // val config = AppConf(args)
-      val BoardSize: Array[Int] = getParamsAsArray(args(0))
-      val SnakeInputPosition: Array[Array[Int]] =
-        Array(getParamsAsArray(args(1), board = true))
-      val InputDepth: Int = args(2).toInt
-      val BoardColumns: Int = BoardSize(1)
+      val snake: String = args(0)
+      val board: String = args(1)
+      val depth: Int = args(2).toInt
+
+      val BoardSize: Array[Int] = newBoardArray(board)
+      val SnakeInputPosition: SnakeArray = newSnakeArray(snake)
 
       // TODO: GET X POSITIONS CHECKED WITH SNAKE
       val BoardGeneration: Option[Board] = Board(BoardSize)
+      val BoardColumns: Int = BoardGeneration.get.board(1)
 
-      new SnakePathCalculation(SnakeInputPosition, BoardColumns, InputDepth).getPaths(SnakeInputPosition)
+      val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardColumns, depth)
+      println("your depth is " + SnakePaths.depth)
+
     }
 
     catch {
-      case e: Exception => println("Your Board or Snake doesn't match constraints")
+      case e: Exception => println("Your Board doesn't match constraints")
     }
   }
 }
