@@ -1,7 +1,5 @@
 package com.fmgallego.literals
 
-import com.fmgallego.snakechallenge.Operations.SnakeArray
-
 object Literals {
 
   object Snake {
@@ -10,7 +8,8 @@ object Literals {
     val SnakeILengthLimit: Int = 2
     val ValueZero = 0
     val Value1 = 1
-    val BarSep: String = "|"
+    val DashSeparator: String = "-"
+    val StringXSeparator: String = "x"
     val MoveRight = "R"
     val MoveLeft = "L"
     val MoveUp = "U"

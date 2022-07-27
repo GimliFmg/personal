@@ -1,9 +1,8 @@
 package com.fmgallego.snakechallenge
 
 import com.fmgallego.literals.Literals.ErrorMessages._
-import com.fmgallego.literals.Literals.Snake.{BarSep, LengthLowerLimit, LengthUpperLimit, MoveDown, MoveLeft, MoveRight, MoveUp, SnakeILengthLimit, Value1}
+import com.fmgallego.literals.Literals.Snake.{DashSeparator, LengthLowerLimit, LengthUpperLimit, MoveDown, MoveLeft, MoveRight, MoveUp, SnakeILengthLimit, StringXSeparator, Value1}
 import org.apache.logging.log4j.scala.Logging
-import org.rogach.scallop.ScallopOption
 
 object Operations extends Logging {
 
@@ -12,17 +11,23 @@ object Operations extends Logging {
   /**
     * this method will transform input params from string to Array
     *
-    * @param arrayAsString will be input string with snake's position
-    * @param board         will be input string with board's size (n x m)
-    * @return an Array of Array[Int] in case board = false and Array[Int] if true
+    * @param arrayAsString will be input string with board's size as string
+    * @return an Array[Int] with board's size
     */
-  def getParamsAsArray(arrayAsString: ScallopOption[String], board: Boolean = false): Array[Int] = {
-    if (board) {
-      arrayAsString.toString.toArray.map(_.toInt)
-    } else {
-      arrayAsString.toString.split(BarSep).map(_.toInt)
-    }
+  def newBoardArray(arrayAsString: String): Array[Int] = {
+    arrayAsString.split(StringXSeparator).map(_.toInt)
   }
+
+  /**
+    * this method will transform input params from string to Array
+    *
+    * @param arrayAsString will be input string with snake's position as string
+    * @return an Array[Int] with snake's position
+    */
+  def newSnakeArray(arrayAsString: String): SnakeArray =
+    arrayAsString.split(DashSeparator)
+      .map(_.split(StringXSeparator))
+      .map(_.map(_.toInt))
 
   /**
     * this method will assert if snake constraints related to the board are met
