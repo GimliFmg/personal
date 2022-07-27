@@ -4,11 +4,11 @@ object Literals {
 
   object SnakeLiterals {
     val LengthLowerLimit: Int = 3
-    val LengthUpperLimit: Int = 10
+    val UpperLimit: Int = 10
     val SnakeILengthLimit: Int = 2
-    val ValueZero = 0
+    val Value0 = 0
     val Value1 = 1
-    val DashSeparator: String = "-"
+    val ExclamationSep: String = "!"
     val StringXSeparator: String = "x"
     val MoveRight = "R"
     val MoveLeft = "L"

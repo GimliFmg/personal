@@ -25,7 +25,7 @@ object Operations extends Logging {
     * @return an Array[Int] with snake's position
     */
   def newSnakeArray(arrayAsString: String): SnakeArray =
-    arrayAsString.split(DashSeparator)
+    arrayAsString.split(ExclamationSep)
       .map(_.split(StringXSeparator))
       .map(_.map(_.toInt))
 
@@ -39,22 +39,24 @@ object Operations extends Logging {
   def assertSnakeConstraints(snake: SnakeArray, cols: Int): Boolean = {
 
     val SnakeLength: Int = snake.length
-    val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= LengthUpperLimit)
+    val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= UpperLimit)
 
-    val SnakeOutOfBoardLimit: Int = snake.map(arr => arr(Value1))
+    val SnakeOutOfAxisY: Int = snake.map(arr => arr(Value1))
       .map(coord => if (coord < cols) 0 else 1).sum
+    val SnakeOutOfAxisX: Int = snake.map(arr => arr(Value0))
+      .map(coord => if (coord < 0 ||coord > UpperLimit) 1 else 0).sum
 
     val SnakeILength: Int = snake.map(_.length)
       .map(length => if (length == SnakeILengthLimit) 0 else 1).sum
 
     val AdjacencyFlag = checkAdjacency(snake)
 
-    if (SnakeOutOfBoardLimit != 0) logger.error(SnakeOutOfBoardLimitMsg)
+    if (SnakeOutOfAxisY != 0 || SnakeOutOfAxisX != 0) logger.error(SnakeOutOfBoardLimitMsg)
     if (SnakeILength != 0) logger.error(Snake2DimError)
     if (!SnakeLengthFlag) logger.error(SnakeLengthMsg)
     if (!AdjacencyFlag) logger.error(SnakeAdjacencyMsg)
 
-    if (SnakeOutOfBoardLimit == 0 && SnakeILength == 0 && SnakeLengthFlag && AdjacencyFlag) true
+    if (SnakeOutOfAxisX == 0 && SnakeOutOfAxisY == 0 && SnakeILength == 0 && SnakeLengthFlag && AdjacencyFlag) true
     else false
   }
 
