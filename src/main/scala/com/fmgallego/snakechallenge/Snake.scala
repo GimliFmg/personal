@@ -1,16 +1,16 @@
 package com.fmgallego.snakechallenge
 
-import com.fmgallego.snakechallenge.Operations.assertSnakeConstraints
+import com.fmgallego.snakechallenge.Operations.{assertSnakeConstraints, SnakeArray}
 import org.apache.logging.log4j.scala.Logging
 
-case class Snake(snake: Array[Array[Int]]) {
+case class Snake(snake: SnakeArray) {
 
-  val SnakeArray: Array[Array[Int]] = snake
+  val SnakeArray: SnakeArray = snake
 }
 
 object Snake extends Logging {
 
-  def apply(snake: Array[Array[Int]], cols: Int): Option[Snake] = {
+  def apply(snake: SnakeArray, cols: Int): Option[Snake] = {
 
     val BoardAndSnakeLimits: Boolean = assertSnakeConstraints(snake, cols)
 
