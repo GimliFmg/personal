@@ -2,7 +2,7 @@ package com.fmgallego.literals
 
 object Literals {
 
-  object Snake {
+  object SnakeLiterals {
     val LengthLowerLimit: Int = 3
     val LengthUpperLimit: Int = 10
     val SnakeILengthLimit: Int = 2
