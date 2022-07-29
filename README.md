@@ -1,11 +1,11 @@
 # FASE DE GRUPOS TORNEO MIXTO VOLEY PLAYA
 ----------------------------------------
 
-### TABLA DE CLASIFICACIÓN DEL GRUPO 2
+### TABLA DE CLASIFICACIÓN DEL GRUPO 1
 
 
 |IDGRUPO|IDEQUIPO|PUNTOS_A_FAVOR|PUNTOS_EN_CONTRA|PARTIDOS_GANADOS|COEFICIENTE|CLASIFICACION|
-
+|-------|--------|--------------|----------------|----------------|-----------|-------------|
 |1      |E       |95.0          |74.0            |3               |1.284      |1            |
 |1      |B       |97.0          |88.0            |3               |1.102      |2            |
 |1      |A       |99.0          |97.0            |3               |1.021      |3            |
