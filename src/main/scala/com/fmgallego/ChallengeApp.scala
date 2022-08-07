@@ -22,12 +22,10 @@ object ChallengeApp extends Logging {
       val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardColumns, depth)
 
       SnakePaths.getPaths(SnakeInputPosition)
-      val AchievedDepth = SnakePaths.Depth match {
-        case depth => s"Your achieved Depth is ${SnakePaths.Depth}"
-        case _ => "Something bad happened"
-      }
+      val AchievedDepth = SnakePaths.Depth
+      val AchievedResult = SnakePaths.Result
 
-      println(AchievedDepth)
+      println(s"You have achieved depth = $AchievedDepth for $AchievedResult times!")
     }
 
     catch {

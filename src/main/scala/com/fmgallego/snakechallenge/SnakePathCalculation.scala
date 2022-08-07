@@ -21,27 +21,36 @@ case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) e
     val goRight = Snake(movingRight(snake), boardCols, newSnakeFlag =  true, snake)
 
     if (goUp.isDefined) {
-      if (Depth == depth) {
-        logger.trace("Your achieved depth is " + Depth + s" $Result times")
-        Some(Depth)
-      }
+      if (Depth == depth) Some(Depth)
       else {
         Depth += 1
         getPaths(goUp.get.snake)
       }
     }
     else if (goLeft.isDefined) {
-      if (Depth == depth) {
-        logger.trace("Your achieved depth is " + Depth + s" $Result times")
-        Some(Depth)
-      }
+      if (Depth == depth) Some(Depth)
       else {
         Depth += 1
         getPaths(goLeft.get.snake)
       }
     }
+    else if (goDown.isDefined) {
+      if (Depth == depth) Some(Depth)
+      else {
+        Depth += 1
+        getPaths(goDown.get.snake)
+      }
+    }
+    else if (goRight.isDefined) {
+      if (Depth == depth) Some(Depth)
+      else {
+        Depth += 1
+        getPaths(goRight.get.snake)
+      }
+    }
     else {
-      None
+      Result += 1
+      getPaths(snake)
     }
   }
 }
