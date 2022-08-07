@@ -36,29 +36,41 @@ object Operations extends Logging {
     * @param cols  : inherited board's columns number
     * @return boolean confirming or denying limits
     */
-  def assertSnakeConstraints(snake: SnakeArray, cols: Int): Boolean = {
+  def assertSnakeConstraints(snake: SnakeArray,
+                             cols: Int,
+                             newSnakeFlag: Boolean = false,
+                             lastSnake: SnakeArray = Array(Array.empty)): Boolean = {
 
-    val SnakeLength: Int = snake.length
-    val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= UpperLimit)
+    def snakeConstraints(): Boolean = {
+      val SnakeLength: Int = snake.length
+      val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= UpperLimit)
 
-    val SnakeOutOfAxisY: Int = snake.map(arr => arr(Value1))
-      .map(coord => if (coord < cols) 0 else 1).sum
-    val SnakeOutOfAxisX: Int = snake.map(arr => arr(Value0))
-      .map(coord => if (coord < 0 ||coord > UpperLimit) 1 else 0).sum
+      val SnakeOutOfAxisY: Int = snake.map(arr => arr(Value1))
+        .map(coord => if (coord < cols) 0 else 1).sum
+      val SnakeOutOfAxisX: Int = snake.map(arr => arr(Value0))
+        .map(coord => if (coord < 0 || coord > UpperLimit) 1 else 0).sum
 
-    val SnakeILength: Int = snake.map(_.length)
-      .map(length => if (length == SnakeILengthLimit) 0 else 1).sum
+      val SnakeILength: Int = snake.map(_.length)
+        .map(length => if (length == SnakeILengthLimit) 0 else 1).sum
 
-    val AdjacencyFlag = checkAdjacency(snake)
+      val AdjacencyFlag = checkAdjacency(snake)
 
-    if (SnakeOutOfAxisY != 0 || SnakeOutOfAxisX != 0) logger.error(SnakeOutOfBoardLimitMsg)
-    if (SnakeILength != 0) logger.error(Snake2DimError)
-    if (!SnakeLengthFlag) logger.error(SnakeLengthMsg)
-    if (!AdjacencyFlag) logger.error(SnakeAdjacencyMsg)
+        if (SnakeOutOfAxisY != 0 || SnakeOutOfAxisX != 0) logger.error(SnakeOutOfBoardLimitMsg)
+        if (SnakeILength != 0) logger.error(Snake2DimError)
+        if (!SnakeLengthFlag) logger.error(SnakeLengthMsg)
+        if (!AdjacencyFlag) logger.error(SnakeAdjacencyMsg)
 
-    if (SnakeOutOfAxisX == 0 && SnakeOutOfAxisY == 0 && SnakeILength == 0 && SnakeLengthFlag && AdjacencyFlag) true
-    else false
+      if (SnakeOutOfAxisX == 0 && SnakeOutOfAxisY == 0 && SnakeILength == 0 && SnakeLengthFlag && AdjacencyFlag) true
+      else false
+    }
+
+    if (newSnakeFlag) {
+      snakeConstraints() && !isCollapsing(snake, lastSnake)
+    } else {
+      snakeConstraints()
+    }
   }
+
 
   def isVerticalAdjacent(snake: SnakeArray, coord: Int): Boolean = {
     val SnakePos: Int = snake(coord)(1)
@@ -117,7 +129,13 @@ object Operations extends Logging {
 
   def movingDown(snake: SnakeArray): SnakeArray = defineMovement(snake, MoveDown)
 
-  def looking(snakeNewPosition: SnakeArray, lastSnake: SnakeArray): Boolean = {
+  /**
+    *
+    * @param snakeNewPosition new snake's position
+    * @param lastSnake        last snake's position
+    * @return true if snake is self-collapsing, otherwise false
+    */
+  def isCollapsing(snakeNewPosition: SnakeArray, lastSnake: SnakeArray): Boolean = {
     val NewHead: Array[Int] = snakeNewPosition take 1 flatMap (_.toList)
     lastSnake contains NewHead
   }

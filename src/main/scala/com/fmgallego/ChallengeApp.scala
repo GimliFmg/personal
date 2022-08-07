@@ -15,7 +15,6 @@ object ChallengeApp extends Logging {
       val BoardSize: Array[Int] = newBoardArray(board)
       val SnakeInputPosition: SnakeArray = newSnakeArray(snake)
 
-      // TODO: GET X POSITIONS CHECKED WITH SNAKE
       val BoardGeneration: Option[Board] = Board(BoardSize)
       val BoardColumns: Int = BoardGeneration.get.board(1)
       Snake(SnakeInputPosition, BoardColumns)
@@ -23,11 +22,13 @@ object ChallengeApp extends Logging {
       val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardColumns, depth)
 
       SnakePaths.getPaths(SnakeInputPosition)
+      val AchievedDepth = SnakePaths.Depth
 
+      println(s"You have achieved depth = $AchievedDepth")
     }
 
     catch {
-      case e: Exception => println("Your Board doesn't match constraints")
+      case e: Exception => throw new Error
     }
   }
 }
