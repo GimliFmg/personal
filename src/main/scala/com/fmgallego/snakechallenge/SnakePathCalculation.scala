@@ -9,9 +9,9 @@ case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) e
 
   val SnakeFirstArray: SnakeArray = snake
   var Depth: Int = 0
-  var Result: Int = 0
+  def getSnakeIf(movement: Option[Snake]): SnakeArray = Option(movement).get.get.snake
 
-  // TODO: WORKS ALMOST FINE, JUST NEED TO CHECK IF SNAKE IS COLLAPSING
+  // TODO: WORKS FINE FOR ONE TIME, NOW I NEED TO CHECK IF ARRAYS ARE DIFFERENT
   // CHECK TRACES
   @tailrec
   final def getPaths(snake: SnakeArray): Option[Int] = {
@@ -20,37 +20,25 @@ case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) e
     val goDown = Snake(movingDown(snake), boardCols, newSnakeFlag =  true, snake)
     val goRight = Snake(movingRight(snake), boardCols, newSnakeFlag =  true, snake)
 
-    if (goUp.isDefined) {
-      if (Depth == depth) Some(Depth)
-      else {
-        Depth += 1
-        getPaths(goUp.get.snake)
+      if (Depth != depth) {
+        if (goUp.isDefined) {
+          Depth += 1
+          getPaths(getSnakeIf(goUp))
+        }
+        else if (goLeft.isDefined) {
+          Depth += 1
+          getPaths(getSnakeIf(goLeft))
+        }
+        else if (goDown.isDefined) {
+          Depth += 1
+          getPaths(getSnakeIf(goDown))
+        }
+        else if (goRight.isDefined) {
+          Depth += 1
+          getPaths(getSnakeIf(goRight))
+        }
+        else None
       }
-    }
-    else if (goLeft.isDefined) {
-      if (Depth == depth) Some(Depth)
-      else {
-        Depth += 1
-        getPaths(goLeft.get.snake)
-      }
-    }
-    else if (goDown.isDefined) {
-      if (Depth == depth) Some(Depth)
-      else {
-        Depth += 1
-        getPaths(goDown.get.snake)
-      }
-    }
-    else if (goRight.isDefined) {
-      if (Depth == depth) Some(Depth)
-      else {
-        Depth += 1
-        getPaths(goRight.get.snake)
-      }
-    }
-    else {
-      Result += 1
-      getPaths(snake)
-    }
+    else Some(Depth)
   }
 }

@@ -23,9 +23,8 @@ object ChallengeApp extends Logging {
 
       SnakePaths.getPaths(SnakeInputPosition)
       val AchievedDepth = SnakePaths.Depth
-      val AchievedResult = SnakePaths.Result
 
-      println(s"You have achieved depth = $AchievedDepth for $AchievedResult times!")
+      println(s"You have achieved depth = $AchievedDepth")
     }
 
     catch {

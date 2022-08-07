@@ -39,8 +39,7 @@ object Operations extends Logging {
   def assertSnakeConstraints(snake: SnakeArray,
                              cols: Int,
                              newSnakeFlag: Boolean = false,
-                             lastSnake: SnakeArray = Array(Array.empty),
-                             movType: String = MoveUp): Boolean = {
+                             lastSnake: SnakeArray = Array(Array.empty)): Boolean = {
 
     def snakeConstraints(): Boolean = {
       val SnakeLength: Int = snake.length
@@ -56,10 +55,10 @@ object Operations extends Logging {
 
       val AdjacencyFlag = checkAdjacency(snake)
 
-      if (SnakeOutOfAxisY != 0 || SnakeOutOfAxisX != 0) logger.error(SnakeOutOfBoardLimitMsg)
-      if (SnakeILength != 0) logger.error(Snake2DimError)
-      if (!SnakeLengthFlag) logger.error(SnakeLengthMsg)
-      if (!AdjacencyFlag) logger.error(SnakeAdjacencyMsg)
+        if (SnakeOutOfAxisY != 0 || SnakeOutOfAxisX != 0) logger.error(SnakeOutOfBoardLimitMsg)
+        if (SnakeILength != 0) logger.error(Snake2DimError)
+        if (!SnakeLengthFlag) logger.error(SnakeLengthMsg)
+        if (!AdjacencyFlag) logger.error(SnakeAdjacencyMsg)
 
       if (SnakeOutOfAxisX == 0 && SnakeOutOfAxisY == 0 && SnakeILength == 0 && SnakeLengthFlag && AdjacencyFlag) true
       else false
