@@ -1,6 +1,6 @@
 package com.fmgallego.snakechallenge
 
-import com.fmgallego.snakechallenge.Operations.{isCollapsing, movingDown, movingLeft, movingRight, movingUp, SnakeArray}
+import com.fmgallego.snakechallenge.Operations.{isCollapsing, movingDown, movingLeft, movingRight, movingUp, InvalidArray, SnakeArray}
 import org.apache.logging.log4j.scala.Logging
 
 import scala.annotation.tailrec
@@ -9,36 +9,43 @@ case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) e
 
   val SnakeFirstArray: SnakeArray = snake
   var Depth: Int = 0
-  def getSnakeIf(movement: Option[Snake]): SnakeArray = Option(movement).get.get.snake
+
 
   // TODO: WORKS FINE FOR ONE TIME, NOW I NEED TO CHECK IF ARRAYS ARE DIFFERENT
   // CHECK TRACES
   @tailrec
-  final def getPaths(snake: SnakeArray): Option[Int] = {
-    val goUp = Snake(movingUp(snake), boardCols, newSnakeFlag =  true, snake)
-    val goLeft = Snake(movingLeft(snake), boardCols, newSnakeFlag =  true, snake)
-    val goDown = Snake(movingDown(snake), boardCols, newSnakeFlag =  true, snake)
-    val goRight = Snake(movingRight(snake), boardCols, newSnakeFlag =  true, snake)
+  final def getPaths(snake: SnakeArray): SnakeArray = {
 
-      if (Depth != depth) {
-        if (goUp.isDefined) {
-          Depth += 1
-          getPaths(getSnakeIf(goUp))
-        }
-        else if (goLeft.isDefined) {
-          Depth += 1
-          getPaths(getSnakeIf(goLeft))
-        }
-        else if (goDown.isDefined) {
-          Depth += 1
-          getPaths(getSnakeIf(goDown))
-        }
-        else if (goRight.isDefined) {
-          Depth += 1
-          getPaths(getSnakeIf(goRight))
-        }
-        else None
+    case class Movement() {
+      def getSnakeIf(movement: Option[Snake]): SnakeArray = {
+        val mov = if (movement.isDefined) true else false
+        if (mov) Option(movement).get.get.snake
+        else InvalidArray
       }
-    else Some(Depth)
+      val goUp: SnakeArray = getSnakeIf(Snake(movingUp(snake), boardCols, newSnakeFlag = true, snake))
+      val goLeft: SnakeArray = getSnakeIf(Snake(movingLeft(snake), boardCols, newSnakeFlag = true, snake))
+      val goDown: SnakeArray = getSnakeIf(Snake(movingDown(snake), boardCols, newSnakeFlag = true, snake))
+      val goRight: SnakeArray = getSnakeIf(Snake(movingRight(snake), boardCols, newSnakeFlag = true, snake))
+    }
+      if (Depth != depth) {
+        if (!(Movement().goUp sameElements InvalidArray)) {
+          Depth += 1
+          getPaths(Movement().goUp)
+        }
+        else if (!(Movement().goLeft sameElements InvalidArray)) {
+          Depth += 1
+          getPaths(Movement().goLeft)
+        }
+        else if (!(Movement().goDown sameElements InvalidArray)) {
+          Depth += 1
+          getPaths(Movement().goDown)
+        }
+        else if (!(Movement().goRight sameElements InvalidArray)) {
+          Depth += 1
+          getPaths(Movement().goRight)
+        }
+        else snake
+      }
+    else snake
   }
 }

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.scala.Logging
 object Operations extends Logging {
 
   type SnakeArray = Array[Array[Int]]
+  val InvalidArray: SnakeArray = Array(Array(0,0))
 
   /**
     * this method will transform input params from string to Array
@@ -40,26 +41,20 @@ object Operations extends Logging {
                              cols: Int,
                              newSnakeFlag: Boolean = false,
                              lastSnake: SnakeArray = Array(Array.empty)): Boolean = {
+    val SnakeLength: Int = snake.length
+    val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= UpperLimit)
+
+    val SnakeOutOfAxisY: Int = snake.map(arr => arr(Value1))
+      .map(coord => if (coord < cols) 0 else 1).sum
+    val SnakeOutOfAxisX: Int = snake.map(arr => arr(Value0))
+      .map(coord => if (coord < 0 || coord > UpperLimit) 1 else 0).sum
+
+    val SnakeILength: Int = snake.map(_.length)
+      .map(length => if (length == SnakeILengthLimit) 0 else 1).sum
+
+    val AdjacencyFlag = checkAdjacency(snake)
 
     def snakeConstraints(): Boolean = {
-      val SnakeLength: Int = snake.length
-      val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= UpperLimit)
-
-      val SnakeOutOfAxisY: Int = snake.map(arr => arr(Value1))
-        .map(coord => if (coord < cols) 0 else 1).sum
-      val SnakeOutOfAxisX: Int = snake.map(arr => arr(Value0))
-        .map(coord => if (coord < 0 || coord > UpperLimit) 1 else 0).sum
-
-      val SnakeILength: Int = snake.map(_.length)
-        .map(length => if (length == SnakeILengthLimit) 0 else 1).sum
-
-      val AdjacencyFlag = checkAdjacency(snake)
-
-        if (SnakeOutOfAxisY != 0 || SnakeOutOfAxisX != 0) logger.error(SnakeOutOfBoardLimitMsg)
-        if (SnakeILength != 0) logger.error(Snake2DimError)
-        if (!SnakeLengthFlag) logger.error(SnakeLengthMsg)
-        if (!AdjacencyFlag) logger.error(SnakeAdjacencyMsg)
-
       if (SnakeOutOfAxisX == 0 && SnakeOutOfAxisY == 0 && SnakeILength == 0 && SnakeLengthFlag && AdjacencyFlag) true
       else false
     }
@@ -67,6 +62,10 @@ object Operations extends Logging {
     if (newSnakeFlag) {
       snakeConstraints() && !isCollapsing(snake, lastSnake)
     } else {
+      if (SnakeOutOfAxisY != 0 || SnakeOutOfAxisX != 0) logger.error(SnakeOutOfBoardLimitMsg)
+      if (SnakeILength != 0) logger.error(Snake2DimError)
+      if (!SnakeLengthFlag) logger.error(SnakeLengthMsg)
+      if (!AdjacencyFlag) logger.error(SnakeAdjacencyMsg)
       snakeConstraints()
     }
   }
