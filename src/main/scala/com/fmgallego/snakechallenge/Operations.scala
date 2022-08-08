@@ -70,7 +70,6 @@ object Operations extends Logging {
     }
   }
 
-
   def isVerticalAdjacent(snake: SnakeArray, coord: Int): Boolean = {
     val SnakePos: Int = snake(coord)(1)
 
@@ -104,29 +103,21 @@ object Operations extends Logging {
 
   def defineMovement(snake: SnakeArray, movType: String): SnakeArray = {
     val x = movType match {
-      case MoveRight => 0
-      case MoveLeft => 0
-      case MoveUp => -1
-      case MoveDown => 1
+      case Right => 0
+      case Left => 0
+      case Up => -1
+      case Down => 1
     }
     val y = movType match {
-      case MoveRight => 1
-      case MoveLeft => -1
-      case MoveUp => -0
-      case MoveDown => 0
+      case Right => 1
+      case Left => -1
+      case Up => -0
+      case Down => 0
     }
     val MovType = List(snake(0)(0) + x, snake(0)(1) + y)
     (snake.toList.map(_.toList).reverse :+ MovType).reverse.take(snake.length)
       .toArray.map(_.toArray)
   }
-
-  def movingRight(snake: SnakeArray): SnakeArray = defineMovement(snake, MoveRight)
-
-  def movingLeft(snake: SnakeArray): SnakeArray = defineMovement(snake, MoveLeft)
-
-  def movingUp(snake: SnakeArray): SnakeArray = defineMovement(snake, MoveUp)
-
-  def movingDown(snake: SnakeArray): SnakeArray = defineMovement(snake, MoveDown)
 
   /**
     *

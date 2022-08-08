@@ -1,6 +1,7 @@
 package com.fmgallego.snakechallenge
 
-import com.fmgallego.snakechallenge.Operations.{isCollapsing, movingDown, movingLeft, movingRight, movingUp, InvalidArray, SnakeArray}
+import com.fmgallego.literals.Literals.SnakeLiterals.{Down, Left, Right, Up}
+import com.fmgallego.snakechallenge.Operations.{defineMovement, InvalidArray, SnakeArray}
 import org.apache.logging.log4j.scala.Logging
 
 import scala.annotation.tailrec
@@ -15,37 +16,35 @@ case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) e
   // CHECK TRACES
   @tailrec
   final def getPaths(snake: SnakeArray): SnakeArray = {
-
-    case class Movement() {
+    class Movement {
       def getSnakeIf(movement: Option[Snake]): SnakeArray = {
-        val mov = if (movement.isDefined) true else false
-        if (mov) Option(movement).get.get.snake
+        if (movement.isDefined) Option(movement).get.get.snake
         else InvalidArray
       }
-      val goUp: SnakeArray = getSnakeIf(Snake(movingUp(snake), boardCols, newSnakeFlag = true, snake))
-      val goLeft: SnakeArray = getSnakeIf(Snake(movingLeft(snake), boardCols, newSnakeFlag = true, snake))
-      val goDown: SnakeArray = getSnakeIf(Snake(movingDown(snake), boardCols, newSnakeFlag = true, snake))
-      val goRight: SnakeArray = getSnakeIf(Snake(movingRight(snake), boardCols, newSnakeFlag = true, snake))
-    }
-      if (Depth != depth) {
-        if (!(Movement().goUp sameElements InvalidArray)) {
-          Depth += 1
-          getPaths(Movement().goUp)
-        }
-        else if (!(Movement().goLeft sameElements InvalidArray)) {
-          Depth += 1
-          getPaths(Movement().goLeft)
-        }
-        else if (!(Movement().goDown sameElements InvalidArray)) {
-          Depth += 1
-          getPaths(Movement().goDown)
-        }
-        else if (!(Movement().goRight sameElements InvalidArray)) {
-          Depth += 1
-          getPaths(Movement().goRight)
-        }
-        else snake
+      def mySnake(movement: String): SnakeArray = {
+        getSnakeIf(Snake(defineMovement(snake, movement), boardCols, newSnakeFlag = true, snake))
       }
+    }
+    val Move = new Movement
+    if (Depth != depth) {
+      if (!(Move.mySnake(Up) sameElements InvalidArray)) {
+        Depth += 1
+        getPaths(Move.mySnake(Up))
+      }
+      else if (!(Move.mySnake(Down) sameElements InvalidArray)) {
+        Depth += 1
+        getPaths(Move.mySnake(Down))
+      }
+      else if (!(Move.mySnake(Left) sameElements InvalidArray)) {
+        Depth += 1
+        getPaths(Move.mySnake(Left))
+      }
+      else if (!(Move.mySnake(Right) sameElements InvalidArray)) {
+        Depth += 1
+        getPaths(Move.mySnake(Right))
+      }
+      else snake
+    }
     else snake
   }
 }

@@ -21,6 +21,7 @@ object ChallengeApp extends Logging {
 
       val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardColumns, depth)
 
+      // TODO: just while work is in progress, will find a way to show it cleaner eventually
       println("SERPIENTE INICIAL")
       SnakeInputPosition foreach (a => print(a.mkString + ", "))
       println()
