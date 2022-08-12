@@ -36,20 +36,20 @@ object Operations extends Logging {
     * this method will assert if snake constraints related to the board are met
     *
     * @param snake : snake's input array
-    * @param cols  : inherited board's columns number
+    * @param board  : inherited board's size
     * @return boolean confirming or denying limits
     */
   def assertSnakeConstraints(snake: SnakeArray,
-                             cols: Int,
+                             board: Array[Int],
                              newSnakeFlag: Boolean = false,
                              lastSnake: SnakeArray = Array(Array.empty)): Boolean = {
     val SnakeLength: Int = snake.length
     val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= UpperLimit)
 
     val SnakeOutOfAxisY: Int = snake.map(arr => arr(Value1))
-      .map(coord => if (coord > cols || coord < 0) 1 else 0).sum
+      .map(coord => if (coord > board(1) || coord < 0) 1 else 0).sum
     val SnakeOutOfAxisX: Int = snake.map(arr => arr(Value0))
-      .map(coord => if (coord < 0 || coord > UpperLimit) 1 else 0).sum
+      .map(coord => if (coord < 0 || coord > board(0)) 1 else 0).sum
 
     val SnakeILength: Int = snake.map(_.length)
       .map(length => if (length == SnakeILengthLimit) 0 else 1).sum
@@ -105,7 +105,7 @@ object Operations extends Logging {
     }
   }
 
-  def defineMovement(snake: SnakeArray, movType: String, boardCols: Int): SnakeArray = {
+  def defineMovement(snake: SnakeArray, movType: String, board: Array[Int]): SnakeArray = {
     val x = movType match {
       case Right => 0
       case Left => 0
@@ -123,7 +123,7 @@ object Operations extends Logging {
     val SnakeMovement: SnakeArray = (snake.toList.map(_.toList).reverse :+ MovType).reverse.take(snake.length)
       .toArray.map(_.toArray)
 
-    if (Snake(SnakeMovement, boardCols, newSnakeFlag = true, snake).isDefined) SnakeMovement
+    if (Snake(SnakeMovement, board, newSnakeFlag = true, snake).isDefined) SnakeMovement
     else InvalidArray
   }
 
@@ -135,7 +135,7 @@ object Operations extends Logging {
     */
   def isCollapsing(snakeNewPosition: SnakeArray, lastSnake: SnakeArray): Boolean = {
     val NewHead: Array[String] = (snakeNewPosition take 1 map (_.mkString))
-    val lastSnakeStrings: Array[String] = lastSnake map (_.mkString)
+    val lastSnakeStrings: Array[String] = lastSnake.take(lastSnake.length - 1) map (_.mkString)
     lastSnakeStrings contains NewHead(0)
   }
 
