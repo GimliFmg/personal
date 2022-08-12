@@ -7,21 +7,22 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) extends Logging {
+case class SnakePathCalculation(snake: SnakeArray, boardSize: Array[Int], depth: Int) extends Logging {
 
   val FirstSnake: SnakeArray = snake
   var Depth: Int = 0
   var Times: Int = 0
   val mutableArray: ListBuffer[String] = mutable.ListBuffer[String]()
   var ResultadoCaminos: Int = 0
+  val TimesTried: Int = 1000
 
   @tailrec
   final def getPaths(snake: SnakeArray): Int = {
 
     val lastSnake = snake
-    val snakeToTry = defineMovement(snake, randomDirection, boardCols)
+    val snakeToTry = defineMovement(snake, randomDirection, boardSize)
 
-    if (Times != 5000) {
+    if (Times != TimesTried) {
       if (Depth < depth) {
         if (!(snakeToTry sameElements InvalidArray)) {
           Depth += 1
