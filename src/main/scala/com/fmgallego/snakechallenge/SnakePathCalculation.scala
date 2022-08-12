@@ -1,50 +1,45 @@
 package com.fmgallego.snakechallenge
 
-import com.fmgallego.literals.Literals.SnakeLiterals.{Down, Left, Right, Up}
-import com.fmgallego.snakechallenge.Operations.{defineMovement, InvalidArray, SnakeArray}
+import com.fmgallego.snakechallenge.Operations.{defineMovement, randomDirection, InvalidArray, SnakeArray}
 import org.apache.logging.log4j.scala.Logging
 
 import scala.annotation.tailrec
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) extends Logging {
 
-  val SnakeFirstArray: SnakeArray = snake
+  val FirstSnake: SnakeArray = snake
   var Depth: Int = 0
+  var Times: Int = 0
+  val mutableArray: ListBuffer[String] = mutable.ListBuffer[String]()
+  var ResultadoCaminos: Int = 0
 
-
-  // TODO: WORKS FINE FOR ONE TIME, NOW I NEED TO CHECK IF ARRAYS ARE DIFFERENT
-  // CHECK TRACES
   @tailrec
-  final def getPaths(snake: SnakeArray): SnakeArray = {
-    class Movement {
-      def getSnakeIf(movement: Option[Snake]): SnakeArray = {
-        if (movement.isDefined) Option(movement).get.get.snake
-        else InvalidArray
+  final def getPaths(snake: SnakeArray): Int = {
+
+    val lastSnake = snake
+    val snakeToTry = defineMovement(snake, randomDirection, boardCols)
+
+    if (Times != 5000) {
+      if (Depth < depth) {
+        if (!(snakeToTry sameElements InvalidArray)) {
+          Depth += 1
+          getPaths(snakeToTry)
+        }
+        else getPaths(lastSnake)
       }
-      def mySnake(movement: String): SnakeArray = {
-        getSnakeIf(Snake(defineMovement(snake, movement), boardCols, newSnakeFlag = true, snake))
+      else {
+        Depth = 0
+        Times += 1
+        mutableArray += lastSnake.flatten.mkString
+        getPaths(FirstSnake)
       }
     }
-    val Move = new Movement
-    if (Depth != depth) {
-      if (!(Move.mySnake(Up) sameElements InvalidArray)) {
-        Depth += 1
-        getPaths(Move.mySnake(Up))
-      }
-      else if (!(Move.mySnake(Down) sameElements InvalidArray)) {
-        Depth += 1
-        getPaths(Move.mySnake(Down))
-      }
-      else if (!(Move.mySnake(Left) sameElements InvalidArray)) {
-        Depth += 1
-        getPaths(Move.mySnake(Left))
-      }
-      else if (!(Move.mySnake(Right) sameElements InvalidArray)) {
-        Depth += 1
-        getPaths(Move.mySnake(Right))
-      }
-      else snake
+    else {
+      ResultadoCaminos = mutableArray.distinct.map(_ => 1).sum
+      ResultadoCaminos
     }
-    else snake
+
   }
 }

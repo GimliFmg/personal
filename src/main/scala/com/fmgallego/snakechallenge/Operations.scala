@@ -4,6 +4,8 @@ import com.fmgallego.literals.Literals.ErrorMessages._
 import com.fmgallego.literals.Literals.SnakeLiterals._
 import org.apache.logging.log4j.scala.Logging
 
+import scala.util.Random
+
 object Operations extends Logging {
 
   type SnakeArray = Array[Array[Int]]
@@ -45,7 +47,7 @@ object Operations extends Logging {
     val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= UpperLimit)
 
     val SnakeOutOfAxisY: Int = snake.map(arr => arr(Value1))
-      .map(coord => if (coord < cols) 0 else 1).sum
+      .map(coord => if (coord > cols || coord < 0) 1 else 0).sum
     val SnakeOutOfAxisX: Int = snake.map(arr => arr(Value0))
       .map(coord => if (coord < 0 || coord > UpperLimit) 1 else 0).sum
 
@@ -54,8 +56,10 @@ object Operations extends Logging {
 
     val AdjacencyFlag = checkAdjacency(snake)
 
+    val SnakeDistinct = snake.map(_.mkString).distinct.length == snake.length
+
     def snakeConstraints(): Boolean = {
-      if (SnakeOutOfAxisX == 0 && SnakeOutOfAxisY == 0 && SnakeILength == 0 && SnakeLengthFlag && AdjacencyFlag) true
+      if (SnakeOutOfAxisX == 0 && SnakeOutOfAxisY == 0 && SnakeILength == 0 && SnakeLengthFlag && AdjacencyFlag && SnakeDistinct) true
       else false
     }
 
@@ -101,7 +105,7 @@ object Operations extends Logging {
     }
   }
 
-  def defineMovement(snake: SnakeArray, movType: String): SnakeArray = {
+  def defineMovement(snake: SnakeArray, movType: String, boardCols: Int): SnakeArray = {
     val x = movType match {
       case Right => 0
       case Left => 0
@@ -115,8 +119,12 @@ object Operations extends Logging {
       case Down => 0
     }
     val MovType = List(snake(0)(0) + x, snake(0)(1) + y)
-    (snake.toList.map(_.toList).reverse :+ MovType).reverse.take(snake.length)
+
+    val SnakeMovement: SnakeArray = (snake.toList.map(_.toList).reverse :+ MovType).reverse.take(snake.length)
       .toArray.map(_.toArray)
+
+    if (Snake(SnakeMovement, boardCols, newSnakeFlag = true, snake).isDefined) SnakeMovement
+    else InvalidArray
   }
 
   /**
@@ -126,8 +134,18 @@ object Operations extends Logging {
     * @return true if snake is self-collapsing, otherwise false
     */
   def isCollapsing(snakeNewPosition: SnakeArray, lastSnake: SnakeArray): Boolean = {
-    val NewHead: Array[Int] = snakeNewPosition take 1 flatMap (_.toList)
-    lastSnake contains NewHead
+    val NewHead: Array[String] = (snakeNewPosition take 1 map (_.mkString))
+    val lastSnakeStrings: Array[String] = lastSnake map (_.mkString)
+    lastSnakeStrings contains NewHead(0)
+  }
+
+  /**
+    * generates a new random direction
+    * @return a string "U","L","R" OR "D"
+    */
+  def randomDirection: String = {
+    val random = new Random
+    ListaMovimientos(random.nextInt(ListaMovimientos.length))
   }
 
 }

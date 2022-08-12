@@ -14,6 +14,8 @@ object Literals {
     val Left = "L"
     val Up = "U"
     val Down = "D"
+    val ListaMovimientos: List[String] = List(Left, Up, Right, Down)
+    val BigInt10To9Plus7: Int = 10^9 + 7
    }
 
   object ErrorMessages {
