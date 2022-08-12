@@ -47,7 +47,7 @@ object Operations extends Logging {
     val SnakeLengthFlag: Boolean = (LengthLowerLimit <= SnakeLength) && (SnakeLength <= UpperLimit)
 
     val SnakeOutOfAxisY: Int = snake.map(arr => arr(Value1))
-      .map(coord => if (coord < cols) 0 else 1).sum
+      .map(coord => if (coord > cols || coord < 0) 1 else 0).sum
     val SnakeOutOfAxisX: Int = snake.map(arr => arr(Value0))
       .map(coord => if (coord < 0 || coord > UpperLimit) 1 else 0).sum
 

@@ -16,7 +16,7 @@ object ChallengeApp extends Logging {
       val SnakeInputPosition: SnakeArray = newSnakeArray(snake)
 
       val BoardGeneration: Option[Board] = Board(BoardSize)
-      val BoardColumns: Int = BoardGeneration.get.board(1)
+      val BoardColumns: Int = BoardGeneration.get.board(1) - 1
       Snake(SnakeInputPosition, BoardColumns)
 
       val SnakePaths: SnakePathCalculation2 = SnakePathCalculation2(SnakeInputPosition, BoardColumns, depth)
