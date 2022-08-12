@@ -4,45 +4,42 @@ import com.fmgallego.snakechallenge.Operations.{defineMovement, randomDirection,
 import org.apache.logging.log4j.scala.Logging
 
 import scala.annotation.tailrec
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
-case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) extends Logging {}
+case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) extends Logging {
 
- /* val SnakeFirstArray: SnakeArray = snake
+  val FirstSnake: SnakeArray = snake
   var Depth: Int = 0
-  var caminos = 0
-
-    def getSnakeIf(movement: Option[Snake]): SnakeArray = {
-      if (movement.isDefined) Option(movement).get.get.snake
-      else InvalidArray
-    }
-    def mySnake(movement: String): SnakeArray = {
-      getSnakeIf(Snake(defineMovement(snake, movement), boardCols, newSnakeFlag = true, snake))
-    }
-  def checkMovement(mov: String): Boolean = {
-    !(mySnake(mov) sameElements InvalidArray)
-  }
+  var Times: Int = 0
+  val mutableArray: ListBuffer[String] = mutable.ListBuffer[String]()
+  var ResultadoCaminos: Int = 0
 
   @tailrec
-  final def getPaths(snake: SnakeArray): SnakeArray = {
+  final def getPaths(snake: SnakeArray): Int = {
 
-    if (Depth < 3) {
-      val RandomMov = randomDirection
-      if (checkMovement(RandomMov)) {
-        Depth += 1
-        println(s"SERPIENTE CON EL DEPTH = $Depth")
-        mySnake(RandomMov).foreach(a => print(a.mkString + ", "))
-        println("")
-        getPaths(mySnake(RandomMov))
+    val lastSnake = snake
+    val snakeToTry = defineMovement(snake, randomDirection, boardCols)
+
+    if (Times != 5000) {
+      if (Depth < depth) {
+        if (!(snakeToTry sameElements InvalidArray)) {
+          Depth += 1
+          getPaths(snakeToTry)
+        }
+        else getPaths(lastSnake)
       }
       else {
-        getPaths(mySnake(randomDirection))
+        Depth = 0
+        Times += 1
+        mutableArray += lastSnake.flatten.mkString
+        getPaths(FirstSnake)
       }
     }
-
     else {
-
-      snake}
+      ResultadoCaminos = mutableArray.distinct.map(_ => 1).sum
+      ResultadoCaminos
     }
-}
 
-  */
+  }
+}

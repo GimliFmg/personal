@@ -1,6 +1,7 @@
 package com.fmgallego
 
-import com.fmgallego.snakechallenge.{Board, Snake, SnakePathCalculation2}
+import com.fmgallego.literals.Literals.SnakeLiterals.BigInt10To9Plus7
+import com.fmgallego.snakechallenge.{Board, Snake, SnakePathCalculation}
 import com.fmgallego.snakechallenge.Operations.{newBoardArray, newSnakeArray, SnakeArray}
 import org.apache.logging.log4j.scala.Logging
 
@@ -17,19 +18,16 @@ object ChallengeApp extends Logging {
 
       val BoardGeneration: Option[Board] = Board(BoardSize)
       val BoardColumns: Int = BoardGeneration.get.board(1) - 1
+
       Snake(SnakeInputPosition, BoardColumns)
 
-      val SnakePaths: SnakePathCalculation2 = SnakePathCalculation2(SnakeInputPosition, BoardColumns, depth)
+      val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardColumns, depth)
 
-      println("SERPIENTE INICIAL")
-      SnakeInputPosition foreach (a => print(a.mkString + ", "))
-      println()
-      println("SERPIENTE CON EL CAMINO FINALIZAZO")
-      SnakePaths.getPaths(SnakeInputPosition).foreach(a => print(a.mkString + ", "))
-      println()
-      val AchievedDepth = SnakePaths.Depth
+      SnakePaths.getPaths(SnakeInputPosition)
 
-      println(s"You have achieved depth = $AchievedDepth")
+      val Resultado = SnakePaths.ResultadoCaminos % BigInt10To9Plus7
+
+      println(s"Your snake can go through ${Resultado} different paths of depth $depth")
     }
 
     catch {

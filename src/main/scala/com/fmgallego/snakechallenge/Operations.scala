@@ -123,7 +123,7 @@ object Operations extends Logging {
     val SnakeMovement: SnakeArray = (snake.toList.map(_.toList).reverse :+ MovType).reverse.take(snake.length)
       .toArray.map(_.toArray)
 
-    if (Snake(SnakeMovement, boardCols).isDefined) SnakeMovement
+    if (Snake(SnakeMovement, boardCols, newSnakeFlag = true, snake).isDefined) SnakeMovement
     else InvalidArray
   }
 
