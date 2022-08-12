@@ -1,5 +1,6 @@
 package com.fmgallego
 
+import com.fmgallego.literals.Literals.SnakeLiterals.BigInt10To9Plus7
 import com.fmgallego.snakechallenge.{Board, Snake, SnakePathCalculation}
 import com.fmgallego.snakechallenge.Operations.{newBoardArray, newSnakeArray, SnakeArray}
 import org.apache.logging.log4j.scala.Logging
@@ -15,19 +16,22 @@ object ChallengeApp extends Logging {
       val BoardSize: Array[Int] = newBoardArray(board)
       val SnakeInputPosition: SnakeArray = newSnakeArray(snake)
 
-      // TODO: GET X POSITIONS CHECKED WITH SNAKE
       val BoardGeneration: Option[Board] = Board(BoardSize)
-      val BoardColumns: Int = BoardGeneration.get.board(1)
+      val BoardColumns: Int = BoardGeneration.get.board(1) - 1
+
       Snake(SnakeInputPosition, BoardColumns)
 
       val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardColumns, depth)
 
       SnakePaths.getPaths(SnakeInputPosition)
 
+      val Resultado = SnakePaths.ResultadoCaminos % BigInt10To9Plus7
+
+      println(s"Your snake can go through ${Resultado} different paths of depth $depth")
     }
 
     catch {
-      case e: Exception => println("Your Board doesn't match constraints")
+      case e: Exception => throw new Error
     }
   }
 }

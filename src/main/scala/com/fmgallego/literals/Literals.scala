@@ -10,10 +10,12 @@ object Literals {
     val Value1 = 1
     val ExclamationSep: String = "!"
     val StringXSeparator: String = "x"
-    val MoveRight = "R"
-    val MoveLeft = "L"
-    val MoveUp = "U"
-    val MoveDown = "D"
+    val Right = "R"
+    val Left = "L"
+    val Up = "U"
+    val Down = "D"
+    val ListaMovimientos: List[String] = List(Left, Up, Right, Down)
+    val BigInt10To9Plus7: Int = 10^9 + 7
    }
 
   object ErrorMessages {

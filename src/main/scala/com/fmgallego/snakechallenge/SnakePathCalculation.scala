@@ -1,63 +1,45 @@
 package com.fmgallego.snakechallenge
 
-import com.fmgallego.snakechallenge.Operations.{movingDown, movingLeft, movingRight, movingUp, SnakeArray}
+import com.fmgallego.snakechallenge.Operations.{defineMovement, randomDirection, InvalidArray, SnakeArray}
 import org.apache.logging.log4j.scala.Logging
 
 import scala.annotation.tailrec
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 case class SnakePathCalculation(snake: SnakeArray, boardCols: Int, depth: Int) extends Logging {
 
-  val SnakeFirstArray: SnakeArray = snake
+  val FirstSnake: SnakeArray = snake
   var Depth: Int = 0
+  var Times: Int = 0
+  val mutableArray: ListBuffer[String] = mutable.ListBuffer[String]()
+  var ResultadoCaminos: Int = 0
 
-  // TODO: WORKS ALMOST FINE, JUST NEED TO CHECK IF SNAKE IS COLLAPSING
-  // CHECK TRACES
-    @tailrec
-    final def getPaths(snake: SnakeArray): Option[Int] = {
-      if (Snake(movingRight(snake), boardCols).isDefined) {
-        if (Depth == depth) {
-          logger.trace("Your achieved depth is " + Depth)
-          Some(Depth)
-        }
-        else {
+  @tailrec
+  final def getPaths(snake: SnakeArray): Int = {
+
+    val lastSnake = snake
+    val snakeToTry = defineMovement(snake, randomDirection, boardCols)
+
+    if (Times != 5000) {
+      if (Depth < depth) {
+        if (!(snakeToTry sameElements InvalidArray)) {
           Depth += 1
-          getPaths(Snake(movingRight(snake), boardCols).get.snake)
+          getPaths(snakeToTry)
         }
-      }
-      else if (Snake(movingLeft(snake), boardCols).isDefined) {
-        if (Depth == depth) {
-          logger.trace("Your achieved depth is " + Depth)
-          Some(Depth)
-        }
-        else {
-          Depth += 1
-          getPaths(Snake(movingRight(snake), boardCols).get.snake)
-        }
-      }
-      else if (Snake(movingDown(snake), boardCols).isDefined) {
-        if (Depth == depth) {
-          logger.trace("Your achieved depth is " + Depth)
-          Some(Depth)
-        }
-        else {
-          Depth += 1
-          getPaths(Snake(movingRight(snake), boardCols).get.snake)
-        }
-      }
-      else if (Snake(movingUp(snake), boardCols).isDefined) {
-        if (Depth == depth) {
-          logger.trace("Your achieved depth is " + Depth)
-          Some(Depth)
-        }
-        else {
-          Depth += 1
-          getPaths(Snake(movingRight(snake), boardCols).get.snake)
-        }
+        else getPaths(lastSnake)
       }
       else {
-        None
+        Depth = 0
+        Times += 1
+        mutableArray += lastSnake.flatten.mkString
+        getPaths(FirstSnake)
       }
-
+    }
+    else {
+      ResultadoCaminos = mutableArray.distinct.map(_ => 1).sum
+      ResultadoCaminos
     }
 
+  }
 }
