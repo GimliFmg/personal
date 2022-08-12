@@ -1,6 +1,6 @@
 package com.fmgallego
 
-import com.fmgallego.snakechallenge.{Board, Snake, SnakePathCalculation}
+import com.fmgallego.snakechallenge.{Board, Snake, SnakePathCalculation2}
 import com.fmgallego.snakechallenge.Operations.{newBoardArray, newSnakeArray, SnakeArray}
 import org.apache.logging.log4j.scala.Logging
 
@@ -19,9 +19,8 @@ object ChallengeApp extends Logging {
       val BoardColumns: Int = BoardGeneration.get.board(1)
       Snake(SnakeInputPosition, BoardColumns)
 
-      val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardColumns, depth)
+      val SnakePaths: SnakePathCalculation2 = SnakePathCalculation2(SnakeInputPosition, BoardColumns, depth)
 
-      // TODO: just while work is in progress, will find a way to show it cleaner eventually
       println("SERPIENTE INICIAL")
       SnakeInputPosition foreach (a => print(a.mkString + ", "))
       println()

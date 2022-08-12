@@ -14,6 +14,7 @@ object Literals {
     val Left = "L"
     val Up = "U"
     val Down = "D"
+    val ListaMovimientos: List[String] = List(Left, Up, Right, Down)
    }
 
   object ErrorMessages {
