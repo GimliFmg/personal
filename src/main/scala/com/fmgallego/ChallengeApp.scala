@@ -8,6 +8,10 @@ import org.apache.logging.log4j.scala.Logging
 object ChallengeApp extends Logging {
 
   def main(args: Array[String]): Unit = {
+    runner(args)
+  }
+
+  def runner(args: Array[String]): Int = {
     try {
       val snake: String = args(0)
       val board: String = args(1)
@@ -17,21 +21,24 @@ object ChallengeApp extends Logging {
       val SnakeInputPosition: SnakeArray = newSnakeArray(snake)
 
       val BoardGeneration: Option[Board] = Board(BoardSize)
-      val BoardColumns: Int = BoardGeneration.get.board(1) - 1
+      val BoardArray: Array[Int] = BoardGeneration.get.board.map(_ - 1)
 
-      Snake(SnakeInputPosition, BoardColumns)
+      Snake(SnakeInputPosition, BoardArray)
 
-      val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardColumns, depth)
+      val SnakePaths: SnakePathCalculation = SnakePathCalculation(SnakeInputPosition, BoardArray, depth)
 
       SnakePaths.getPaths(SnakeInputPosition)
 
-      val Resultado = SnakePaths.ResultadoCaminos % BigInt10To9Plus7
+      val Resultado = SnakePaths.ResultadoCaminos
 
       println(s"Your snake can go through ${Resultado} different paths of depth $depth")
+
+      Resultado
     }
 
     catch {
       case e: Exception => throw new Error
     }
   }
+
 }
